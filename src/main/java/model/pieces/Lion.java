@@ -31,4 +31,8 @@ public class Lion extends Piece {
 
         return false;
     }
+    @Override
+    public boolean peutCapturer(Piece cible, Board board) {
+        return this.getForce() >= cible.getForce(); // Lion captures weaker pieces
+    }
 }

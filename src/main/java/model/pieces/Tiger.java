@@ -30,4 +30,8 @@ public class Tiger extends Piece {
 
         return false;
     }
+    @Override
+    public boolean peutCapturer(Piece cible, Board board) {
+        return this.getForce() >= cible.getForce(); // captures weaker pieces
+    }
 }

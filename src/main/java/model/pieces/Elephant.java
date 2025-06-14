@@ -22,9 +22,13 @@ public class Elephant extends Piece {
         return plateau.estCaseAdjacente(x, y, newX, newY) && !plateau.estRiviere(newX, newY);
     }
 
-    @Override
-    public boolean peutCapturer(Piece cible,Board plateau) {
+    //@Override
+   /* public boolean peutCapturer(Piece cible,Board plateau) {
         // Ne peut pas capturer le Rat
         return !(cible instanceof Rat) && super.peutCapturer(cible,plateau);
+    }*/
+    @Override
+    public boolean peutCapturer(Piece cible, Board board) {
+        return this.getForce() >= cible.getForce(); //
     }
 }

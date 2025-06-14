@@ -42,20 +42,7 @@ public class PlayerDAO {
         }
     }
 
-    public List<Player> getAll() {
-        List<Player> players = new ArrayList<>();
-        String sql = "SELECT * FROM players;";
-        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                Player player = new Player(rs.getString("username"), rs.getString("password"));
-                player.setScore(rs.getInt("score"));
-                players.add(player);
-            }
-        } catch (SQLException e) {
-            System.err.println("Erreur récupération joueurs : " + e.getMessage());
-        }
-        return players;
-    }
+
 
     public Player getByUsername(String username) {
         String sql = "SELECT * FROM players WHERE username = ?;";

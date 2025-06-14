@@ -17,8 +17,13 @@ public class Panthere extends Piece {
 
 
     @Override
-    public boolean peutSeDeplacerVers(int newX, int newY,Board plateau) {
-        return plateau.estCaseAdjacente(x, y, newX, newY);
+    public boolean peutSeDeplacerVers(int newX, int newY, Board plateau) {
+        // Déplacement normal mais ne peut pas entrer dans la rivière
+        return plateau.estCaseAdjacente(x, y, newX, newY) && !plateau.estRiviere(newX, newY);
+    }
+    @Override
+    public boolean peutCapturer(Piece cible, Board board) {
+        return this.getForce() >= cible.getForce();
     }
 }
 

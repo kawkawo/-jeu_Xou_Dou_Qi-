@@ -8,6 +8,7 @@ public class Board {
     public static final int WIDTH = 7;
     public static final int HEIGHT = 9;
 
+
     public Board(Player joueur1, Player joueur2) {
         initialiserPieces(joueur1, joueur2);
     }
@@ -137,8 +138,6 @@ public class Board {
         return false;
     }
 
-
-
     /* Méthodes de jeu */
     public boolean processMove(String moveInput, Player player) {
         try {
@@ -151,7 +150,7 @@ public class Board {
             int x1 = from[0], y1 = from[1];
             int x2 = to[0], y2 = to[1];
 
-            // Validation des positions
+            // Validate positions
             if (x1 < 0 || x1 >= WIDTH || y1 < 0 || y1 >= HEIGHT ||
                     x2 < 0 || x2 >= WIDTH || y2 < 0 || y2 >= HEIGHT) {
                 return false;
@@ -160,20 +159,24 @@ public class Board {
             Piece piece = getPiece(x1, y1);
             if (piece == null || !piece.getProprietaire().equals(player)) return false;
 
-            // Vérification sanctuaire
+            // Check sanctuary (can't move into own sanctuary)
             if (estUnSanctuaire(x2, y2, player)) return false;
 
-            // Vérification déplacement valide
+            // Validate movement
             if (!piece.peutSeDeplacerVers(x2, y2, this)) return false;
 
-            // Vérification capture
-            Piece cible = getPiece(x2, y2);
-            if (cible != null) {
-                if (cible.getProprietaire().equals(player)) return false;
-                if (!piece.peutCapturer(cible,this)) return false;
+            // Check capture
+            Piece target = getPiece(x2, y2);
+            if (target != null) {
+                if (target.getProprietaire().equals(player)) return false;
+                if (!piece.peutCapturer(target, this)) return false;
+
+                // === Update score immediately ===
+                player.setScore(player.getScore() + target.getForce());
+                System.out.println("[CAPTURE] " + player.getUsername() + " +" + target.getForce());
             }
 
-            // Exécution du mouvement
+            // Execute move
             setPiece(x2, y2, piece);
             setPiece(x1, y1, null);
 
@@ -183,6 +186,8 @@ public class Board {
         }
     }
 
+
+
     public boolean checkVictory(Player player) {
         // Vérifie si le joueur a atteint le sanctuaire adverse
         int sanctuaryY = player.getUsername().equals("Joueur1") ? 8 : 0;
@@ -190,7 +195,7 @@ public class Board {
         return sanctuaryPiece != null && sanctuaryPiece.getProprietaire().equals(player);
     }
 
-    /* Méthodes utilitaires */
+
     private int[] parsePosition(String pos) {
         int col = Character.toUpperCase(pos.charAt(0)) - 'A';
         int row = Integer.parseInt(pos.substring(1)) - 1;
@@ -210,4 +215,5 @@ public class Board {
 
     public int getRows() { return HEIGHT; }
     public int getCols() { return WIDTH; }
+
 }

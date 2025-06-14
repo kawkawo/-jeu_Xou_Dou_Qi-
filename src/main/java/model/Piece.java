@@ -23,11 +23,20 @@ public abstract class Piece {
     public abstract boolean peutSeDeplacerVers(int newX, int newY, Board plateau);
 
     public boolean peutCapturer(Piece cible, Board plateau) {
-        if (cible.estDansUnPiege(plateau)) {
+        // Si la cible est dans un piège ennemi, toujours capturable
+        if (plateau.estUnPiege(cible.getX(), cible.getY(), this.proprietaire)) {
             return true;
         }
+
+        // Si nous sommes dans un piège ennemi, ne pouvons rien capturer
+        if (plateau.estUnPiege(this.x, this.y, cible.getProprietaire())) {
+            return false;
+        }
+
+        // Sinon, règles normales de capture
         return this.force >= cible.force;
     }
+
     public boolean estDansUnPiege(Board plateau) {
         return plateau.estUnPiege(x, y, proprietaire);
     }
@@ -38,9 +47,9 @@ public abstract class Piece {
     public void setX(int x) { this.x = x; }
     public void setY(int y) { this.y = y; }
     public Player getProprietaire() { return proprietaire; }
-    public String getNom() { return nom; }
+    //public String getNom() { return nom; }
     public void setDansLeau(boolean dansLeau) { this.estDansLeau = dansLeau; }
-    public boolean isDansLeau() { return estDansLeau; }
+    //public boolean isDansLeau() { return estDansLeau; }
     public int getForce() {
         return force; }
 }

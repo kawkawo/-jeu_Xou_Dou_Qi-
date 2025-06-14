@@ -1,5 +1,5 @@
 package game;
-
+import model.Piece;
 import model.Player;
 import ui.ConsoleUI;
 import java.util.Scanner;
@@ -18,6 +18,9 @@ public class Game {
         this.currentPlayer = player1;
         this.board = new Board(player1, player2);
         this.scanner = new Scanner(System.in);
+        // Reset scores at the start of a new game
+        player1.setScore(0);
+        player2.setScore(0);
     }
 
     public void play() {
@@ -26,6 +29,8 @@ public class Game {
 
         while (!gameEnded) {
             ConsoleUI.displayBoard(board);
+            printScores(); // Display current scores
+
             System.out.println("\n" + currentPlayer.getUsername() + " (" + currentPlayer.getCode() + "), à vous de jouer !");
             System.out.print("Entrez le mouvement (ex: A2 A3) : ");
             String moveInput = scanner.nextLine().trim().toUpperCase();
@@ -37,7 +42,11 @@ public class Game {
             }
 
             if (isValidMoveFormat(moveInput)) {
+
                 if (board.processMove(moveInput, currentPlayer)) {
+                    // Update scores after successful move
+                    updateScores();
+
                     if (board.checkVictory(currentPlayer)) {
                         winner = currentPlayer;
                         gameEnded = true;
@@ -53,6 +62,7 @@ public class Game {
         }
 
         ConsoleUI.displayBoard(board);
+        printFinalScores(); //  Display final scores
         if (winner != null) {
             ConsoleUI.printWinner(winner.getUsername());
         } else {
@@ -61,6 +71,19 @@ public class Game {
         scanner.close();
     }
 
+
+
+    private void printScores() {
+        System.out.println("\n=== SCORES ===");
+        System.out.println(player1.getUsername() + " (" + player1.getCode() + "): " + player1.getScore());
+        System.out.println(player2.getUsername() + " (" + player2.getCode() + "): " + player2.getScore());
+    }
+
+    private void printFinalScores() {
+        System.out.println("\n=== FINAL SCORES ===");
+        System.out.println(player1.getUsername() + ": " + player1.getScore() + " points");
+        System.out.println(player2.getUsername() + ": " + player2.getScore() + " points");
+    }
     private boolean isValidMoveFormat(String input) {
         return input.matches("^[A-I][1-9] [A-I][1-9]$");
     }
@@ -71,5 +94,14 @@ public class Game {
 
     private void switchPlayer() {
         currentPlayer = (currentPlayer == player1) ? player2 : player1;
+    }
+
+    private void updateScores() {
+        // Check if the sanctuary was reached
+        int sanctuaryY = currentPlayer.getCode().equals("P1") ? board.getRows() - 1 : 0;
+        if (board.getPiece(3, sanctuaryY) != null
+                && board.getPiece(3, sanctuaryY).getProprietaire().equals(currentPlayer)) {
+            currentPlayer.setScore(currentPlayer.getScore() + 50); // +50 for sanctuary
+        }
     }
 }
