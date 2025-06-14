@@ -93,7 +93,7 @@ public class ConsoleUI {
     public static void printLegend() {
         System.out.println("\n" + GRID_COLOR + "╔═══════════════════════════════════════════════╗");
         System.out.printf("║ %-54s ║\n", WATER_COLOR + "≈≈≈ - Rivière" + RESET);
-        System.out.printf("║ %-54s ║\n", DEN_COLOR + "⌂⌂⌂ - Sanctuaire" + RESET);
+        System.out.printf("║ %-56s ║\n", DEN_COLOR + "⌂⌂⌂ - Sanctuaire" + RESET);
         System.out.printf("║ %-52s ║\n", TRAP_COLOR + "☠☠☠ - Piège " + RESET);
         System.out.printf("║ %-54s ║\n", PLAYER1_COLOR + "Animal1 - Joueur 1" + RESET);
         System.out.printf("║ %-54s ║\n", PLAYER2_COLOR + "Animal2 - Joueur 2" + RESET);

@@ -90,22 +90,34 @@ public class Board {
     public boolean estRiviere(int x, int y) {
         return estDansLEau(x, y);
     }
-
     public boolean estSautRiviereValide(int fromX, int fromY, int toX, int toY) {
         if (fromX == toX) { // Saut vertical
             int minY = Math.min(fromY, toY);
             int maxY = Math.max(fromY, toY);
-            return (maxY - minY == 3) && estRiviere(fromX, minY + 1) && estRiviere(fromX, minY + 2);
+            //  un saut de 4 cases (3 de rivière au milieu)
+            if (maxY - minY == 4) {
+                for (int y = minY + 1; y < maxY; y++) {
+                    if (!estRiviere(fromX, y)) return false;
+                }
+                return true;
+            }
         } else if (fromY == toY) { // Saut horizontal
             int minX = Math.min(fromX, toX);
             int maxX = Math.max(fromX, toX);
-            return (maxX - minX == 3) && estRiviere(minX + 1, fromY) && estRiviere(minX + 2, fromY);
+            //
+            if (maxX - minX == 3) {
+                for (int x = minX + 1; x < maxX; x++) {
+                    if (!estRiviere(x, fromY)) return false;
+                }
+                return true;
+            }
         }
         return false;
     }
 
+
     public boolean aRatDansRiviereEntre(int fromX, int fromY, int toX, int toY) {
-        if (fromX == toX) { // Vertical
+        if (fromX == toX) { // Saut vertical
             int step = (toY > fromY) ? 1 : -1;
             for (int y = fromY + step; y != toY; y += step) {
                 if (estRiviere(fromX, y)) {
@@ -113,7 +125,7 @@ public class Board {
                     if (p != null && p instanceof Rat) return true;
                 }
             }
-        } else { // Horizontal
+        } else if (fromY == toY) { // Saut horizontal
             int step = (toX > fromX) ? 1 : -1;
             for (int x = fromX + step; x != toX; x += step) {
                 if (estRiviere(x, fromY)) {
@@ -124,6 +136,8 @@ public class Board {
         }
         return false;
     }
+
+
 
     /* Méthodes de jeu */
     public boolean processMove(String moveInput, Player player) {
