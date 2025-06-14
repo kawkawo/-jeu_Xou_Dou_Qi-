@@ -1,9 +1,8 @@
 package model.pieces;
 
+import game.Board;
 import model.Piece;
 import model.Player;
-import model.Plateau;
-import model.pieces.Elephant;
 
 public class Rat extends Piece {
     public Rat(int x, int y, Player proprietaire) {
@@ -11,7 +10,7 @@ public class Rat extends Piece {
     }
 
     @Override
-    public boolean peutCapturer(Piece cible) {
+    public boolean peutCapturer(Piece cible,Board plateau) {
         // Le Rat ne peut pas capturer en sortant de l'eau
         if (this.estDansLeau && !cible.estDansLeau) {
             return false;
@@ -23,7 +22,7 @@ public class Rat extends Piece {
         }
 
         // Sinon, règle normale
-        return super.peutCapturer(cible);
+        return super.peutCapturer(cible,plateau);
     }
     @Override
     public String getShortName() {
@@ -31,7 +30,7 @@ public class Rat extends Piece {
     }
 
     @Override
-    public boolean peutSeDeplacerVers(int newX, int newY, Plateau plateau) {
+    public boolean peutSeDeplacerVers(int newX, int newY, Board plateau) {
         return plateau.estCaseAdjacente(x, y, newX, newY);
     }
 }

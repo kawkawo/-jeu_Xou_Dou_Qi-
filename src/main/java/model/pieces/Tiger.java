@@ -2,9 +2,10 @@
 // model/pieces/Tiger.java
 package model.pieces;
 
+import game.Board;
 import model.Piece;
 import model.Player;
-import model.Plateau;
+
 
 public class Tiger extends Piece {
     public Tiger(int x, int y, Player proprietaire) {
@@ -17,7 +18,16 @@ public class Tiger extends Piece {
 
 
     @Override
-    public boolean peutSeDeplacerVers(int newX, int newY, Plateau plateau) {
-        return plateau.estCaseAdjacente(x, y, newX, newY);
+    public boolean peutSeDeplacerVers(int newX, int newY, Board plateau) {
+        //
+        if (plateau.estCaseAdjacente(x, y, newX, newY)) {
+            return !plateau.estRiviere(newX, newY);
+        }
+
+        if (plateau.estSautRiviereValide(x, y, newX, newY)) {
+            return !plateau.aRatDansRiviereEntre(x, y, newX, newY);
+        }
+
+        return false;
     }
 }

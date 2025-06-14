@@ -2,7 +2,7 @@ package model.pieces;
 
 import model.Piece;
 import model.Player;
-import model.Plateau;
+import game.Board;
 
 public class Chien extends Piece {
     public Chien(int x, int y, Player proprietaire) {
@@ -16,7 +16,7 @@ public class Chien extends Piece {
     }
 
     @Override
-    public boolean peutSeDeplacerVers(int newX, int newY, Plateau plateau) {
+    public boolean peutSeDeplacerVers(int newX, int newY, Board plateau) {
         return plateau.estCaseAdjacente(x, y, newX, newY);
     }
 }

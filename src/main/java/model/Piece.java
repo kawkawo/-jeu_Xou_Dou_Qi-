@@ -1,5 +1,7 @@
 package model;
 
+import game.Board;
+
 public abstract class Piece {
     protected int force;
     protected String nom;
@@ -18,17 +20,15 @@ public abstract class Piece {
 
     public abstract String getShortName();
 
-    public abstract boolean peutSeDeplacerVers(int newX, int newY, Plateau plateau);
+    public abstract boolean peutSeDeplacerVers(int newX, int newY, Board plateau);
 
-    public boolean peutCapturer(Piece cible) {
-        if (cible.estDansUnPiege()) {
+    public boolean peutCapturer(Piece cible, Board plateau) {
+        if (cible.estDansUnPiege(plateau)) {
             return true;
         }
         return this.force >= cible.force;
     }
-
-    public boolean estDansUnPiege() {
-        Plateau plateau = new Plateau();
+    public boolean estDansUnPiege(Board plateau) {
         return plateau.estUnPiege(x, y, proprietaire);
     }
 
@@ -41,5 +41,6 @@ public abstract class Piece {
     public String getNom() { return nom; }
     public void setDansLeau(boolean dansLeau) { this.estDansLeau = dansLeau; }
     public boolean isDansLeau() { return estDansLeau; }
-    public int getForce() { return force; }
+    public int getForce() {
+        return force; }
 }

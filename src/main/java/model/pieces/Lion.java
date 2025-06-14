@@ -1,9 +1,10 @@
 
 package model.pieces;
 
+import game.Board;
 import model.Piece;
 import model.Player;
-import model.Plateau;
+
 
 public class Lion extends Piece {
     public Lion(int x, int y, Player proprietaire) {
@@ -16,8 +17,18 @@ public class Lion extends Piece {
 
 
     @Override
-    public boolean peutSeDeplacerVers(int newX, int newY, Plateau plateau) {
-        // À améliorer : implémenter saut au-dessus de la rivière si applicable
-        return plateau.estCaseAdjacente(x, y, newX, newY);
+    public boolean peutSeDeplacerVers(int newX, int newY, Board plateau) {
+        // Vérifie d'abord si c'est un déplacement adjacent normal
+        if (plateau.estCaseAdjacente(x, y, newX, newY)) {
+            return !plateau.estRiviere(newX, newY); // Lion ne peut pas entrer dans la rivière
+        }
+
+        // Vérifie le saut par-dessus la rivière
+        if (plateau.estSautRiviereValide(x, y, newX, newY)) {
+            // Vérifie qu'il n'y a pas de Rat dans la rivière sur le chemin
+            return !plateau.aRatDansRiviereEntre(x, y, newX, newY);
+        }
+
+        return false;
     }
 }

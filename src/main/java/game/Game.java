@@ -21,23 +21,34 @@ public class Game {
     }
 
     public void play() {
+        ConsoleUI.printWelcome();
         boolean gameEnded = false;
 
         while (!gameEnded) {
             ConsoleUI.displayBoard(board);
-            System.out.println("\n" + currentPlayer.getUsername() + ", à vous de jouer !");
+            System.out.println("\n" + currentPlayer.getUsername() + " (" + currentPlayer.getCode() + "), à vous de jouer !");
             System.out.print("Entrez le mouvement (ex: A2 A3) : ");
-            String moveInput = scanner.nextLine();
+            String moveInput = scanner.nextLine().trim().toUpperCase();
 
-            if (board.processMove(moveInput, currentPlayer)) {
-                if (board.checkVictory(currentPlayer)) {
-                    winner = currentPlayer;
-                    gameEnded = true;
+            if (moveInput.equals("QUIT")) {
+                gameEnded = true;
+                System.out.println("Partie abandonnée.");
+                continue;
+            }
+
+            if (isValidMoveFormat(moveInput)) {
+                if (board.processMove(moveInput, currentPlayer)) {
+                    if (board.checkVictory(currentPlayer)) {
+                        winner = currentPlayer;
+                        gameEnded = true;
+                    } else {
+                        switchPlayer();
+                    }
                 } else {
-                    switchPlayer();
+                    System.out.println("Mouvement invalide. Réessayez.");
                 }
             } else {
-                System.out.println("Mouvement invalide. Réessayez.");
+                System.out.println("Format invalide. Utilisez 'A2 A3' ou tapez 'QUIT' pour quitter.");
             }
         }
 
@@ -47,6 +58,11 @@ public class Game {
         } else {
             ConsoleUI.printDraw();
         }
+        scanner.close();
+    }
+
+    private boolean isValidMoveFormat(String input) {
+        return input.matches("^[A-I][1-9] [A-I][1-9]$");
     }
 
     public Player getWinner() {
