@@ -32,7 +32,13 @@ public class Lion extends Piece {
         return false;
     }
     @Override
+
     public boolean peutCapturer(Piece cible, Board board) {
-        return this.getForce() >= cible.getForce(); // Lion captures weaker pieces
+        // If target is in an opponent's trap, ANY piece can capture it (ignore force)
+        if (board.estUnPiege(cible.getX(), cible.getY(), this.getProprietaire())) {
+            return true;
+        }
+        // Otherwise, use normal force rules
+        return this.getForce() >= cible.getForce();
     }
 }

@@ -97,11 +97,13 @@ public class Game {
     }
 
     private void updateScores() {
-        // Check if the sanctuary was reached
-        int sanctuaryY = currentPlayer.getCode().equals("P1") ? board.getRows() - 1 : 0;
-        if (board.getPiece(3, sanctuaryY) != null
-                && board.getPiece(3, sanctuaryY).getProprietaire().equals(currentPlayer)) {
-            currentPlayer.setScore(currentPlayer.getScore() + 50); // +50 for sanctuary
+        // Check if current player reached the opponent's sanctuary
+        int opponentSanctuaryY = currentPlayer.getCode().equals("P1") ? 0 : board.getRows() - 1;
+        Piece sanctuaryPiece = board.getPiece(3, opponentSanctuaryY);
+
+        if (sanctuaryPiece != null && sanctuaryPiece.getProprietaire().equals(currentPlayer)) {
+            currentPlayer.setScore(currentPlayer.getScore() + 50); 
+            System.out.println("[BONUS] " + currentPlayer.getUsername() + " +50 for reaching the enemy sanctuary!");
         }
     }
 }

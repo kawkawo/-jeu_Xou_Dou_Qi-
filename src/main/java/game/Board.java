@@ -189,10 +189,16 @@ public class Board {
 
 
     public boolean checkVictory(Player player) {
-        // Vérifie si le joueur a atteint le sanctuaire adverse
-        int sanctuaryY = player.getUsername().equals("Joueur1") ? 8 : 0;
-        Piece sanctuaryPiece = getPiece(3, sanctuaryY);
-        return sanctuaryPiece != null && sanctuaryPiece.getProprietaire().equals(player);
+        // Player wins by occupying opponent's sanctuary
+        int opponentSanctuaryY = player.getCode().equals("P1") ? 0 : HEIGHT - 1;
+        Piece p = getPiece(3, opponentSanctuaryY);
+
+        // Debug output
+        /*System.out.println("Checking victory for " + player.getCode() +
+                " at (3," + opponentSanctuaryY + ") - Piece: " +
+                (p != null ? p.getShortName() : "null"));*/
+
+        return p != null && p.getProprietaire().equals(player);
     }
 
 

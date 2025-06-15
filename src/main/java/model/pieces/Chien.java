@@ -21,7 +21,12 @@ public class Chien extends Piece {
         return plateau.estCaseAdjacente(x, y, newX, newY) && !plateau.estRiviere(newX, newY);
     }
     @Override
+
     public boolean peutCapturer(Piece cible, Board board) {
-        return this.getForce() >= cible.getForce(); //
+
+        if (board.estUnPiege(cible.getX(), cible.getY(), this.getProprietaire())) {
+            return true;
+        }
+        return this.getForce() >= cible.getForce();
     }
 }

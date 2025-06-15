@@ -10,19 +10,25 @@ public class Rat extends Piece {
     }
 
     @Override
-    public boolean peutCapturer(Piece cible,Board plateau) {
-        // Le Rat ne peut pas capturer en sortant de l'eau
+
+    public boolean peutCapturer(Piece cible, Board plateau) {
+        // 1: If target is in opponent's trap,  Rat can capture
+        if (plateau.estUnPiege(cible.getX(), cible.getY(), this.getProprietaire())) {
+            return true;
+        }
+
+        //  2: Rat cannot capture when exiting water
         if (this.estDansLeau && !cible.estDansLeau) {
             return false;
         }
 
-        // Peut capturer l'Éléphant
+        // Rule 3: Rat can always capture Elephant (even in water)
         if (cible instanceof Elephant) {
             return true;
         }
 
-        // Sinon, règle normale
-        return super.peutCapturer(cible,plateau);
+        //  Use normal force rules (Rat force=1 vs target force)
+        return this.getForce() >= cible.getForce();
     }
     @Override
     public String getShortName() {
